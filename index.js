@@ -4,10 +4,17 @@ var assign = require('object-assign')
 var isWin = /^win/.test(process.platform);
 
 module.exports = function (command, args, options) {
+  var pathToWinRun = path.join(__dirname, 'WinRun.exe')
+
     if (isWin) {
         args = assign([], args)
         args.unshift(command)
-        return spawn(path.join(__dirname, 'WinRun.exe'), args, options)
+
+        if (options && options.WinRunPath) {
+          pathToWinRun = options.WinRunPath
+        }
+
+        return spawn(pathToWinRun, args, options)
     }
 
     return spawn(command, args, options)
